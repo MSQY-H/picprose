@@ -136,7 +136,7 @@ interface PicproseContextType {
 // Create default image information
 const defaultImageInfo: ImageInfo = {
   url: "stacked-waves.svg",
-  name: "PicProse",
+  name: "LiuShen Cover",
   avatar: "default-author.jpg",
   profile: "default",
   downloadLink: "",
@@ -154,7 +154,7 @@ const defaultPropertyInfo: PropertyInfo = {
   devicon: config.deviconValue[0] || "",
   color: config.backColor,
   aspect: config.aspect,
-  blur: "backdrop-blur-none",
+  blur: "backdrop-blur",
   blurTrans: (Math.floor(2.55 * config.blurTrans)).toString(16),
   logoPosition: config.logoPosition,
   customWidth: 1920,
@@ -225,19 +225,23 @@ export function PicproseProvider({
 
   // Update single property
   const updateProperty = <K extends keyof PropertyInfo>(key: K, value: PropertyInfo[K]) => {
+    const nextValue = key === "blurTrans" && typeof value === "number"
+      ? Math.round(2.55 * value).toString(16).padStart(2, "0")
+      : value;
+
     setPropertyInfo(prev => ({
       ...prev,
-      [key]: value
+      [key]: nextValue
     }));
     
     // If user is updating mask transparency, save to corresponding state based on current background type
-    if (key === "blurTrans" && typeof value === "string") {
+    if (key === "blurTrans" && typeof nextValue === "string") {
       if (backgroundType === 'image') {
-        setImageBlurTrans(value);
+        setImageBlurTrans(nextValue);
       } else if (backgroundType === 'color') {
-        setColorBlurTrans(value);
+        setColorBlurTrans(nextValue);
       } else if (backgroundType === 'pattern') {
-        setPatternBlurTrans(value);
+        setPatternBlurTrans(nextValue);
       }
     }
   };

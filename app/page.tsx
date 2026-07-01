@@ -1,22 +1,7 @@
 "use client";
 import React from "react";
-import {
-  Listbox,
-  ListboxItem,
-  Chip,
-  ScrollShadow,
-  Avatar,
-  Image,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
-  Button,
-} from "@nextui-org/react";
 import { LeftResourcePanel } from "./LeftResourcePanel";
 import { RightPropertyPanel } from "./RightPropertyPanel";
-import { users } from "./data";
 import { ImageEditor } from "./ImageEditor";
 import { ImageEditorToolbar } from "./ImageEditorToolbar";
 import { PicproseProvider } from "./PicproseContext";
@@ -31,8 +16,6 @@ type EditorElements = {
 };
 
 export default function Home() {
-  const [selectedImage, setSelectedImage] = React.useState({});
-  
   // Lift all state to the top-level component
   const [isDragMode, setIsDragMode] = React.useState(false);
   const [elements, setElements] = React.useState<EditorElements>({

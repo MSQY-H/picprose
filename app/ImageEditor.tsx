@@ -79,6 +79,12 @@ export const ImageEditor = ({
   // References
   const imageRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const elementsRef = useRef(elements);
+  const dragMovedRef = useRef(false);
+
+  useEffect(() => {
+    elementsRef.current = elements;
+  }, [elements]);
   
   // Helper function: snap value to grid
   const snapToGrid = (value: number): number => {
@@ -138,6 +144,7 @@ export const ImageEditor = ({
     e.stopPropagation();
     setDraggingElement(element);
     setDragStart({ x: e.clientX, y: e.clientY });
+    dragMovedRef.current = false;
   };
   
   // Mouse move handling
@@ -157,6 +164,7 @@ export const ImageEditor = ({
   // Handle element drag
   const handleElementDrag = (elementKey: DraggableElement, deltaX: number, deltaY: number) => {
     if (!elementKey) return;
+    dragMovedRef.current = true;
     
     setElements(prev => {
       const newElements = {...prev};
@@ -184,8 +192,8 @@ export const ImageEditor = ({
   
   // Mouse release handling
   const handleMouseUp = () => {
-    if (draggingElement) {
-      saveHistory(elements);
+    if (draggingElement && dragMovedRef.current) {
+      saveHistory(elementsRef.current);
     }
     setDraggingElement(null);
   };
@@ -278,7 +286,6 @@ export const ImageEditor = ({
               height: '100%',
               objectFit: 'cover',
               objectPosition: `center ${50 - imagePosition * 0.5}%`,
-              transition: 'object-position 0.1s ease-out',
             }}
             draggable={false}
           />
@@ -516,14 +523,14 @@ export const ImageEditor = ({
 
       {/* Image author information */}
       {backgroundType === 'image' && (
-        <div className="absolute bottom-4 right-4 opacity-80">
+        <div className="absolute bottom-4 right-4 z-20 opacity-90 pointer-events-none">
           <div className="group-hover:flex hidden items-center">
             <span className="text-sm text-white mx-2">Photo by</span>
             <a
               href={imageInfo.profile}
               target="_blank"
               rel="noreferrer"
-              className="cursor-pointer flex items-center bg-gray-300 rounded-full text-sm"
+              className="pointer-events-auto cursor-pointer flex items-center bg-gray-300 rounded-full text-sm"
             >
               <img
                 src={imageInfo.avatar}
@@ -533,9 +540,9 @@ export const ImageEditor = ({
               <span className="pr-2">{imageInfo.name}</span>
             </a>
             <a
-              href="https://unsplash.com/?utm_source=PicProse&utm_medium=referral"
+              href="https://unsplash.com/?utm_source=LiuShenCover&utm_medium=referral"
               target="_blank"
-              className="text-sm text-white mx-2"
+              className="pointer-events-auto text-sm text-white mx-2"
             >
               Unsplash
             </a>

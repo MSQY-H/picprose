@@ -1,10 +1,61 @@
 import { NextResponse } from 'next/server';
-import { createApi } from 'unsplash-js';
 import { NextRequest } from 'next/server';
 
-const unsplashApi = createApi({
-  accessKey: process.env.UNSPLASH_API_KEY!, // Note: do not use NEXT_PUBLIC_ prefix
-});
+const UNSPLASH_API_BASE = 'https://api.unsplash.com';
+
+const jsonHeaders = {
+  Accept: 'application/json',
+  'Accept-Version': 'v1',
+};
+
+function buildUnsplashResponse(status: number, response: unknown) {
+  return {
+    type: 'success',
+    status,
+    response,
+  };
+}
+
+function buildUnsplashError(status: number, message: string) {
+  return {
+    type: 'error',
+    status,
+    errors: [message],
+    response: null,
+  };
+}
+
+async function fetchUnsplash(path: string, params: URLSearchParams) {
+  const accessKey = process.env.UNSPLASH_API_KEY;
+
+  if (!accessKey) {
+    return NextResponse.json(
+      buildUnsplashError(500, 'UNSPLASH_API_KEY is not configured'),
+      { status: 500 },
+    );
+  }
+
+  params.set('client_id', accessKey);
+  const response = await fetch(`${UNSPLASH_API_BASE}${path}?${params.toString()}`, {
+    headers: jsonHeaders,
+    next: { revalidate: 60 },
+  });
+
+  const payload = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const message = Array.isArray(payload?.errors)
+      ? payload.errors.join(', ')
+      : `Unsplash request failed with status ${response.status}`;
+
+    return NextResponse.json(
+      buildUnsplashError(response.status, message),
+      { status: response.status },
+    );
+  }
+
+  return NextResponse.json(buildUnsplashResponse(response.status, payload));
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -13,23 +64,24 @@ export async function GET(request: NextRequest) {
   const perPage = searchParams.get('perPage') || '30';
   
   try {
-    let result;
     if (query) {
-      result = await unsplashApi.search.getPhotos({
+      const params = new URLSearchParams({
         query,
-        page: parseInt(page),
-        perPage: parseInt(perPage)
+        page,
+        per_page: perPage,
       });
-    } else {
-      result = await unsplashApi.photos.getRandom({
-        count: parseInt(perPage)
-      });
+
+      return fetchUnsplash('/search/photos', params);
     }
-    
-    return NextResponse.json(result);
+
+    const params = new URLSearchParams({
+      count: perPage,
+    });
+
+    return fetchUnsplash('/photos/random', params);
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to fetch photos' },
+      buildUnsplashError(500, error instanceof Error ? error.message : 'Failed to fetch photos'),
       { status: 500 }
     );
   }

@@ -1,0 +1,108 @@
+export const zh = {
+  LeftResourcePanel: {
+    powered_by: "Powered by ",
+    input_search: "搜索图片...",
+    search_end: "已经到底了",
+    images_tab: "图片",
+    colors_tab: "颜色",
+    patterns_tab: "纹理",
+    patterns: "纹理",
+    solid_colors: "纯色",
+    gradient_colors: "渐变色",
+    svg_patterns: "SVG 图案",
+  },
+  RightPropertyPanel: {
+    property: "属性",
+    aspect: "比例",
+    mask: "遮罩",
+    transparence: "透明度",
+    font: "字体",
+    icon: "图标",
+    font_size: "标题字号",
+    author_size: "作者字号",
+    title: "标题",
+    title_place: "请输入标题",
+    author: "作者",
+    download: "生成",
+    custom_resolution: "自定义分辨率",
+    width: "宽",
+    height: "高",
+    landscape: "横屏",
+    portrait: "竖屏",
+    confirm: "确认",
+    select_dimensions: "选择尺寸",
+    customize_svg: "自定义 SVG 图案",
+    randomize: "随机生成",
+    select_svg_pattern: "请先选择 SVG 图案",
+    color: "颜色",
+    scale: "缩放",
+    strokeWidth: "描边宽度",
+    lineWidth: "线条宽度",
+    spacing: "间距",
+    gridSize: "网格大小",
+    radius: "半径",
+    density: "密度",
+    lines: "线条数量",
+    backgroundColor: "背景颜色",
+    primaryColor: "主色",
+    secondaryColor: "辅色",
+    accentColor: "强调色",
+    complexity: "复杂度",
+    svg_panel_title: "波浪设置",
+    shape: "形状",
+    amplitude: "振幅",
+    frequency: "频率",
+    speed: "速度",
+    direction: "方向",
+    left: "向左",
+    right: "向右",
+    none: "无",
+    rotation: "旋转",
+    layers: "层数",
+    layer_opacity: "层透明度",
+    colors: "颜色",
+    start_color: "起始颜色",
+    end_color: "结束颜色",
+    contrast: "对比度",
+    background: "背景",
+    gradient: "渐变",
+    solid: "纯色",
+    randomize_wave: "随机生成",
+    title_width: "标题宽度",
+    devices: "设备",
+    social_media: "社交媒体",
+    image_position: "背景图片位置",
+    background_blur: "背景模糊度",
+  },
+  ImageEditorToolbar: {
+    edit: "编辑",
+    lock: "锁定",
+    undo: "撤销",
+    redo: "重做",
+    reset: "重置",
+    edit_title: "解锁并进入拖动编辑",
+    lock_title: "锁定并收起编辑工具",
+    undo_title: "撤销上一次拖动",
+    redo_title: "重做上一次拖动",
+    reset_title: "重置布局",
+    drag_mode_hint: "拖动模式：可拖动{elements}",
+    image_title_author_icon: "图片、标题、作者和图标",
+    title_author_icon: "标题、作者和图标",
+  },
+};
+
+export type TranslationNamespace = keyof typeof zh;
+
+export function getTranslations<T extends TranslationNamespace>(namespace: T) {
+  return (key: keyof typeof zh[T] & string, values?: Record<string, string>) => {
+    let text = String(zh[namespace][key] || key);
+
+    if (values) {
+      for (const [name, value] of Object.entries(values)) {
+        text = text.split(`{${name}}`).join(value);
+      }
+    }
+
+    return text;
+  };
+}

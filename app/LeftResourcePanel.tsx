@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Input,
   ListboxItem,
   Chip,
   ScrollShadow,
@@ -14,13 +13,11 @@ import {
   NavbarItem,
   Spinner,
   Button,
-  Tabs,
-  Tab,
 } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import PhotoAlbum from "react-photo-album";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {useTranslations} from 'next-intl';
+import { getTranslations } from "./translations";
 import { usePicprose } from "./PicproseContext";
 import { SVG_BACKGROUNDS } from './svgBackgrounds';
 
@@ -62,112 +59,6 @@ const GRADIENT_COLORS = [
   "linear-gradient(to right, #0f0c29, #302b63, #24243e)"
 ];
 
-// Pattern background presets
-const PATTERN_BACKGROUNDS = [
-  // Dot pattern
-  {
-    name: "点状图案",
-    value: "radial-gradient(#444cf7 1px, transparent 1px) 0 0 / 20px 20px",
-    bgColor: "#ffffff"
-  },
-  // Grid lines
-  {
-    name: "网格线",
-    value: "linear-gradient(#444cf7 1px, transparent 1px) 0 0 / 20px 20px, linear-gradient(90deg, #444cf7 1px, transparent 1px) 0 0 / 20px 20px",
-    bgColor: "#ffffff"
-  },
-  // Diagonal lines
-  {
-    name: "对角线",
-    value: "repeating-linear-gradient(45deg, #444cf7, #444cf7 5px, transparent 5px, transparent 25px)",
-    bgColor: "#ffffff"
-  },
-  // Wave pattern
-  {
-    name: "波浪图案",
-    value: "repeating-radial-gradient(#444cf7, #444cf7 1px, transparent 1px, transparent 13px)",
-    bgColor: "#ffffff"
-  },
-  // Stripe pattern
-  {
-    name: "条纹图案",
-    value: "repeating-linear-gradient(-45deg, #f472b6, #f472b6 10px, #ffffff 10px, #ffffff 20px)",
-    bgColor: "#ffffff"
-  },
-  // Plant pattern
-  {
-    name: "植物图案",
-    value: "radial-gradient(circle at 0% 50%, rgba(96, 165, 250, 0.2) 9px, transparent 10px), radial-gradient(at 100% 100%, rgba(52, 211, 153, 0.2) 15px, transparent 16px)",
-    bgColor: "#f8fafc"
-  },
-  // Block puzzle
-  {
-    name: "方块拼图",
-    value: "linear-gradient(135deg, #f7acbc 25%, transparent 25%) -20px 0, linear-gradient(225deg, #f7acbc 25%, transparent 25%) -20px 0, linear-gradient(315deg, #f7acbc 25%, transparent 25%), linear-gradient(45deg, #f7acbc 25%, transparent 25%)",
-    bgColor: "#ffb6c1"
-  },
-  // Hexagon
-  {
-    name: "六边形",
-    value: "radial-gradient(circle at 33% 33%, #f8b195 5%, transparent 5.5%), radial-gradient(circle at 72% 64%, #8b5cf6 5%, transparent 5.5%), radial-gradient(circle at 45% 85%, #3b82f6 5%, transparent 5.5%), radial-gradient(circle at 75% 20%, #06b6d4 5%, transparent 5.5%), radial-gradient(circle at 20% 60%, #22c55e 5%, transparent 5.5%)",
-    bgColor: "#ffffff"
-  },
-  // Dot array
-  {
-    name: "圆点阵列",
-    value: "radial-gradient(#c06c84 20%, transparent 20%) 0 0 / 20px 20px, radial-gradient(#c06c84 20%, transparent 20%) 10px 10px / 20px 20px",
-    bgColor: "#ffffff"
-  },
-  // Geometric triangles
-  {
-    name: "几何三角形",
-    value: "linear-gradient(30deg, #6d28d9 12%, transparent 12.5%, transparent 87%, #6d28d9 87.5%, #6d28d9), linear-gradient(150deg, #6d28d9 12%, transparent 12.5%, transparent 87%, #6d28d9 87.5%, #6d28d9), linear-gradient(30deg, #6d28d9 12%, transparent 12.5%, transparent 87%, #6d28d9 87.5%, #6d28d9), linear-gradient(150deg, #6d28d9 12%, transparent 12.5%, transparent 87%, #6d28d9 87.5%, #6d28d9), linear-gradient(60deg, #a78bfa 25%, transparent 25.5%, transparent 75%, #a78bfa 75%, #a78bfa), linear-gradient(60deg, #a78bfa 25%, transparent 25.5%, transparent 75%, #a78bfa 75%, #a78bfa)",
-    bgColor: "#ffffff"
-  },
-  // Cross lines
-  {
-    name: "交叉线条",
-    value: "repeating-linear-gradient(0deg, #38bdf8, #38bdf8 2px, transparent 2px, transparent 20px), repeating-linear-gradient(90deg, #38bdf8, #38bdf8 2px, transparent 2px, transparent 20px)",
-    bgColor: "#ffffff" 
-  },
-  // Neon spots
-  {
-    name: "霓虹斑点",
-    value: "radial-gradient(circle at 50% 0%, #fb7185 10%, #4f46e5 15%, transparent 60%), radial-gradient(circle at 85% 30%, #2dd4bf 15%, #8b5cf6 30%, transparent 55%), radial-gradient(circle at 10% 70%, #f59e0b 5%, #ec4899 15%, transparent 35%)",
-    bgColor: "#0f172a"
-  },
-  // Checkerboard
-  {
-    name: "棋盘格",
-    value: "linear-gradient(45deg, #444cf722 25%, transparent 25%) 0 0 / 20px 20px, linear-gradient(-45deg, #444cf722 25%, transparent 25%) 0 0 / 20px 20px, linear-gradient(45deg, transparent 75%, #444cf722 75%) 0 0 / 20px 20px, linear-gradient(-45deg, transparent 75%, #444cf722 75%) 0 0 / 20px 20px",
-    bgColor: "#ffffff"
-  },
-  // Mosaic
-  {
-    name: "马赛克",
-    value: "linear-gradient(135deg, #eab308 21px, #fef08a 22px, #fef08a 24px, transparent 24px, transparent 67px, #fef08a 67px, #fef08a 69px, transparent 69px), linear-gradient(225deg, #eab308 21px, #fef08a 22px, #fef08a 24px, transparent 24px, transparent 67px, #fef08a 67px, #fef08a 69px, transparent 69px) 0 64px",
-    bgColor: "#eab308"
-  },
-  // Pixel dots
-  {
-    name: "像素点",
-    value: "linear-gradient(90deg, rgba(166, 173, 186, 0.2) 2px, transparent 0), linear-gradient(180deg, rgba(166, 173, 186, 0.2) 2px, transparent 0)",
-    bgColor: "#f1f5f9"
-  },
-  // Paper texture
-  {
-    name: "纸张纹理",
-    value: "linear-gradient(135deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.03) 75%, transparent 75%, transparent)",
-    bgColor: "#f5f5f4"
-  },
-  // Colorful bubbles
-  {
-    name: "彩色泡泡",
-    value: "radial-gradient(circle at 33% 33%, #f43f5e 5%, transparent 5.5%), radial-gradient(circle at 72% 64%, #8b5cf6 5%, transparent 5.5%), radial-gradient(circle at 45% 85%, #3b82f6 5%, transparent 5.5%), radial-gradient(circle at 75% 20%, #06b6d4 5%, transparent 5.5%), radial-gradient(circle at 20% 60%, #22c55e 5%, transparent 5.5%)",
-    bgColor: "#ffffff"
-  }
-];
-
 // Update SvgPatternPanel component
 const SvgPatternPanel = () => {
   const { 
@@ -178,7 +69,7 @@ const SvgPatternPanel = () => {
     setSvgPatternParams,
     setShowSvgPanel 
   } = usePicprose();
-  const t = useTranslations('LeftResourcePanel');
+  const t = getTranslations("LeftResourcePanel");
   
   // Manually define corner template to ensure availability
   const cornerTemplate = (params: any) => {
@@ -297,18 +188,18 @@ const SvgPatternPanel = () => {
   };
 
   return (
-    <div className="p-4">
-      <h3 className="text-lg font-medium mb-4">{t('svg_patterns')}</h3>
+    <div className="space-y-4">
+      <h3 className="pp-section-title">{t('svg_patterns')}</h3>
       <div className="grid grid-cols-2 gap-4">
         {/* Heazy wave SVG template */}
         <div className="flex flex-col items-center">
           <div 
-            className={`w-full aspect-[4/3] rounded-md cursor-pointer hover:scale-105 transition-transform overflow-hidden ${selectedSvgIndex === 0 ? 'border-2 border-blue-500' : 'border border-gray-300 dark:border-gray-700'}`}
+            className={`w-full aspect-[4/3] pp-card-option cursor-pointer overflow-hidden ${selectedSvgIndex === 0 ? 'border-blue-500 bg-blue-50' : ''}`}
             onClick={() => handlePatternSelect(0)}
             style={{ backgroundImage: 'url(waves.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
           >
           </div>
-          <div className="text-center text-default-600 mt-2">
+          <div className="text-center text-slate-600 text-sm mt-2">
             {svgBgs[0]?.name || "波浪"}
           </div>
         </div>
@@ -316,13 +207,13 @@ const SvgPatternPanel = () => {
         {/* Corner SVG template */}
         <div className="flex flex-col items-center">
           <div 
-            className={`w-full aspect-[4/3] rounded-md cursor-pointer hover:scale-105 transition-transform overflow-hidden ${selectedSvgIndex === 1 ? 'border-2 border-blue-500' : 'border border-gray-300 dark:border-gray-700'}`}
+            className={`w-full aspect-[4/3] pp-card-option cursor-pointer overflow-hidden ${selectedSvgIndex === 1 ? 'border-blue-500 bg-blue-50' : ''}`}
             onClick={() => handlePatternSelect(1)}
             style={{ backgroundImage: 'url(corners.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
           >
            
           </div>
-          <div className="text-center text-default-600 mt-2">
+          <div className="text-center text-slate-600 text-sm mt-2">
             {svgBgs[1]?.name || "角落"}
           </div>
         </div>
@@ -425,7 +316,7 @@ export const PaletteIcon = (props: React.SVGProps<SVGSVGElement>) => {
 // Color selection component
 const ColorPanel = () => {
   const { setBackgroundType, setBackgroundColor } = usePicprose();
-  const t = useTranslations('LeftResourcePanel');
+  const t = getTranslations("LeftResourcePanel");
 
   const handleColorSelect = (color: string) => {
     setBackgroundType('color');
@@ -433,25 +324,25 @@ const ColorPanel = () => {
   };
 
   return (
-    <div className="p-4">
-      <h3 className="text-lg font-medium mb-4">{t('solid_colors')}</h3>
+    <div className="space-y-4">
+      <h3 className="pp-section-title">{t('solid_colors')}</h3>
       <div className="grid grid-cols-6 gap-2 mb-6">
         {SOLID_COLORS.map((color, index) => (
           <div 
             key={index}
-            className="w-full aspect-square rounded-md cursor-pointer hover:scale-110 transition-transform border border-gray-300 dark:border-gray-700"
+            className="pp-color-tile"
             style={{ backgroundColor: color }}
             onClick={() => handleColorSelect(color)}
           />
         ))}
       </div>
 
-      <h3 className="text-lg font-medium my-4">{t('gradient_colors')}</h3>
+      <h3 className="pp-section-title">{t('gradient_colors')}</h3>
       <div className="grid grid-cols-3 gap-2">
         {GRADIENT_COLORS.map((gradient, index) => (
           <div 
             key={index}
-            className="w-full h-20 rounded-md cursor-pointer hover:scale-105 transition-transform border border-gray-300 dark:border-gray-700"
+            className="pp-gradient-tile"
             style={{ background: gradient }}
             onClick={() => handleColorSelect(gradient)}
           />
@@ -530,7 +421,7 @@ export const SvgIcon = (props: React.SVGProps<SVGSVGElement>) => {
 };
 
 export const LeftResourcePanel = () => {
-  const t = useTranslations('LeftResourcePanel');
+  const t = getTranslations("LeftResourcePanel");
   const { setImageInfo, setBackgroundType } = usePicprose();
   
   const [photos, setPhotos] = React.useState<any[]>([]);
@@ -540,7 +431,6 @@ export const LeftResourcePanel = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [hasMorePhotos, setHasMorePhotos] = React.useState(true);
   const [hasSetInitialPhoto, setHasSetInitialPhoto] = React.useState(false);
-  const [windowHeight, setWindowHeight] = React.useState(0);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const scrollPositionRef = React.useRef(0);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -559,7 +449,7 @@ export const LeftResourcePanel = () => {
       const file = URL.createObjectURL(event.target.files[0]);
       setImageInfo({
         url: file,
-        name: "PicProse",
+        name: "LiuShen Cover",
         avatar: "default-author.jpg",
         profile: "default",
         downloadLink: "",
@@ -605,7 +495,7 @@ export const LeftResourcePanel = () => {
                 height: item.height,
                 name: item.user.name,
                 avatar: item.user.profile_image.small,
-                profile: `${item.user.links.html}?utm_source=PicProse&utm_medium=referral`,
+                profile: `${item.user.links.html}?utm_source=LiuShenCover&utm_medium=referral`,
                 downloadLink: item.links?.download || "",
               };
             });
@@ -752,7 +642,7 @@ export const LeftResourcePanel = () => {
                 height: item.height,
                 name: item.user.name,
                 avatar: item.user.profile_image.small,
-                profile: `${item.user.links.html}?utm_source=PicProse&utm_medium=referral`,
+                profile: `${item.user.links.html}?utm_source=LiuShenCover&utm_medium=referral`,
                 downloadLink: item.links?.download || "",
               };
             });
@@ -907,23 +797,11 @@ export const LeftResourcePanel = () => {
   };
 
   React.useEffect(() => {
-    setWindowHeight(window.innerHeight);
-    
     // Only fetch random photos when component mounts and activeTab is "images"
     if (activeTab === "images" && photos.length === 0 && !isLoading) {
       fetchRandomPhotos();
       setHasMorePhotos(true); // Ensure more can be loaded
     }
-
-    const handleResize = () => {
-      setWindowHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, [activeTab, photos.length, isLoading]);
 
   const selectPhoto = (index: number, photoList: any[]) => {
@@ -991,60 +869,81 @@ export const LeftResourcePanel = () => {
   };
 
   const renderImagePanel = () => (
-    <div className="flex-grow relative">
-      <div 
-        id="scrollableDiv"
-        ref={scrollContainerRef}
-        style={{ height: windowHeight - 220, overflow: 'auto' }}
-        className="scrollbar-thin scrollbar-color-auto"
-      >
-        <InfiniteScroll
-          dataLength={photos.length}
-          next={handleLoadMore}
-          hasMore={hasMorePhotos && !isLoading && activeTab === "images"}
-          loader={
-            <div className="grid justify-items-center">
-              <Spinner className="my-4" />
-            </div>
-          }
-          endMessage={
-            photos.length > 0 ? (
-              <div className="grid justify-items-center">
-                <div className="my-4">{t('search_end')}</div>
-              </div>
-            ) : null
-          }
-          scrollableTarget="scrollableDiv"
-          className="px-3"
-          scrollThreshold={0.75}
-          initialScrollY={0}
+    <div className="pp-section pp-photo-panel">
+      <div className="pp-resource-tools">
+        <input
+          className="pp-native-field pp-search-field"
+          type="search"
+          placeholder={t('input_search')}
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          onKeyDown={handleSearchKeyDown}
+        />
+        <Button
+          isIconOnly
+          variant="flat"
+          color="primary"
+          className="pp-icon-button"
+          onClick={handleSearch}
         >
-          {photos.length > 0 ? (
-            <PhotoAlbum
-              photos={photos}
-              layout="rows"
-              targetRowHeight={TARGET_ROW_HEIGHT}
-              rowConstraints={ROW_CONSTRAINTS}
-              spacing={PHOTO_SPACING}
-              onClick={({ index }) => selectPhoto(index, photos)}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-40">
-              <Spinner />
-            </div>
-          )}
-        </InfiniteScroll>
+          <SearchIcon className="w-5 h-5 text-[#2F6EE7] dark:text-white/90 pointer-events-none flex-shrink-0 block" />
+        </Button>
       </div>
-      <div className="absolute bottom-0 left-0 m-4 w-40 h-6 bg-black bg-opacity-65 rounded-xl">
-        <div className="flex items-center ml-2">
-          <span className="leading-6 text-xs text-white text-center">
+      <div className="pp-photo-scroll-wrap">
+        <div 
+          id="scrollableDiv"
+          ref={scrollContainerRef}
+          style={{ height: "100%", overflow: "auto" }}
+          className="pp-sidebar-scroll"
+        >
+          <InfiniteScroll
+            dataLength={photos.length}
+            next={handleLoadMore}
+            hasMore={hasMorePhotos && !isLoading && activeTab === "images"}
+            loader={
+              <div className="grid justify-items-center">
+                <Spinner className="my-4" />
+              </div>
+            }
+            endMessage={
+              photos.length > 0 ? (
+                <div className="grid justify-items-center">
+                  <div className="my-4">{t('search_end')}</div>
+                </div>
+              ) : null
+            }
+            scrollableTarget="scrollableDiv"
+            className="px-1 pb-12"
+            scrollThreshold={0.75}
+            initialScrollY={0}
+          >
+            {photos.length > 0 ? (
+              <PhotoAlbum
+                photos={photos}
+                layout="rows"
+                targetRowHeight={TARGET_ROW_HEIGHT}
+                rowConstraints={ROW_CONSTRAINTS}
+                spacing={PHOTO_SPACING}
+                onClick={({ index }) => selectPhoto(index, photos)}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-40">
+                <Spinner />
+              </div>
+            )}
+          </InfiniteScroll>
+        </div>
+      </div>
+      <div className="absolute pp-unsplash-badge left-4 h-7 rounded-md bg-slate-950/75 backdrop-blur">
+        <div className="flex items-center gap-2 px-2 h-full whitespace-nowrap">
+          <span className="text-xs text-white text-center leading-none shrink-0">
             {t('powered_by')}
           </span>
           <a
-            href="https://unsplash.com/?utm_source=PicProse&utm_medium=referral"
+            href="https://unsplash.com/?utm_source=LiuShenCover&utm_medium=referral"
             target="_blank"
           >
-            <img className="w-20 h-4" src="./Unsplash_Logo_Full.svg" />
+            <img className="w-20 h-4 max-w-none" src="./Unsplash_Logo_Full.svg" alt="Unsplash" />
           </a>
         </div>
       </div>
@@ -1052,114 +951,95 @@ export const LeftResourcePanel = () => {
   );
 
   const renderColorPanel = () => (
-    <div className="flex-grow" style={{ height: windowHeight - 220 }}>
-      <ScrollShadow className="h-full overflow-y-auto">
+    <div className="pp-section pp-resource-panel">
+      <ScrollShadow className="h-full overflow-y-auto pp-sidebar-scroll pr-1">
         <ColorPanel />
       </ScrollShadow>
     </div>
   );
 
   const renderPatternPanel = () => (
-    <div className="flex-grow" style={{ height: windowHeight - 220 }}>
-      <ScrollShadow className="h-full overflow-y-auto">
+    <div className="pp-section pp-resource-panel">
+      <ScrollShadow className="h-full overflow-y-auto pp-sidebar-scroll pr-1">
         <SvgPatternPanel />
       </ScrollShadow>
     </div>
   );
 
   return (
-    <div className="w-full flex flex-col h-screen">
+    <div className="pp-sidebar w-full flex flex-col h-screen border-r">
       <div className="w-full flex-none">
         <Navbar
+          className="pp-sidebar-header"
           classNames={{
-            wrapper: "px-4",
+            wrapper: "px-0 max-w-none",
           }}
         >
-          <NavbarBrand>
-            <PicproseLogo />
-            <p className="font-bold text-inherit">PicProse</p>
+          <NavbarBrand className="gap-3">
+            <div className="pp-brand-mark">
+              <PicproseLogo />
+            </div>
+            <div>
+              <p className="pp-sidebar-title">LiuShen Cover</p>
+              <p className="pp-sidebar-subtitle">Assets & backgrounds</p>
+            </div>
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
               <Avatar
                 isBordered
-                src="https://i.pravatar.cc/150?u=a04258114e29026302d"
+                className="w-9 h-9"
+                src="https://blog.liushen.fun/info/avatar.ico"
               />
             </NavbarItem>
           </NavbarContent>
         </Navbar>
       </div>
       
-      <div className="px-2 pt-2 flex-grow flex flex-col">
-        <Tabs 
-          selectedKey={activeTab} 
-          onSelectionChange={(key) => handleTabChange(key as string)}
-          color="default"
-          variant="solid"
-          fullWidth
-          classNames={{
-            base: "flex flex-col flex-grow",
-            panel: "flex-grow overflow-hidden",
-            tabList: "mb-0",
-            tab: "py-2 px-2"
-          }}
-        >
-          <Tab 
-            key="images" 
-            title={
-              <div className="flex items-center gap-2">
-                <GalleryIcon className="w-5 h-5" />
-                <span className="text-sm">{t('images_tab')}</span>
-              </div>
-            }
-          >
-            {renderImagePanel()}
-          </Tab>
-          <Tab 
-            key="colors" 
-            title={
-              <div className="flex items-center gap-2">
-                <PaletteIcon className="w-5 h-5" />
-                <span className="text-sm">{t('colors_tab')}</span>
-              </div>
-            }
-          >
-            {renderColorPanel()}
-          </Tab>
-          <Tab 
-            key="patterns" 
-            title={
-              <div className="flex items-center gap-2">
-                <SvgIcon className="w-5 h-5" />
-                <span className="text-sm">{t('patterns_tab')}</span>
-              </div>
-            }
-          >
-            {renderPatternPanel()}
-          </Tab>
-        </Tabs>
-      </div>
-      
-      <div className="w-full flex-none mt-auto">
-        <Navbar
-          classNames={{
-            wrapper: "px-4",
-          }}
-        >
-          <input
-            type="file"
-            className="hidden"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-          />
+      <div className="pp-sidebar-body">
+        <input
+          type="file"
+          className="hidden"
+          onChange={handleFileChange}
+          ref={fileInputRef}
+        />
+        <div className="pp-resource-topbar">
+          <div className="pp-resource-tabs" role="tablist" aria-label="背景资源">
+            <button
+              type="button"
+              className={`pp-resource-tab ${activeTab === "images" ? "is-active" : ""}`}
+              onClick={() => handleTabChange("images")}
+            >
+              <GalleryIcon className="w-5 h-5" />
+              <span>{t('images_tab')}</span>
+            </button>
+            <button
+              type="button"
+              className={`pp-resource-tab ${activeTab === "colors" ? "is-active" : ""}`}
+              onClick={() => handleTabChange("colors")}
+            >
+              <PaletteIcon className="w-5 h-5" />
+              <span>{t('colors_tab')}</span>
+            </button>
+            <button
+              type="button"
+              className={`pp-resource-tab ${activeTab === "patterns" ? "is-active" : ""}`}
+              onClick={() => handleTabChange("patterns")}
+            >
+              <SvgIcon className="w-5 h-5" />
+              <span>{t('patterns_tab')}</span>
+            </button>
+          </div>
           <Button
             variant="flat"
             color="primary"
             isIconOnly
+            className="pp-resource-upload-tab"
             onClick={handleButtonClick}
+            aria-label="上传背景"
           >
             <svg
-              className="w-5 h-5 text-[#2F6EE7] dark:text-white/90 text-slate-450 pointer-events-none flex-shrink-0"
+              className="w-5 h-5 text-[#2F6EE7] dark:text-white/90 pointer-events-none flex-shrink-0 block"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -1176,29 +1056,12 @@ export const LeftResourcePanel = () => {
               />
             </svg>
           </Button>
-          <Input
-            type="search"
-            placeholder={t('input_search')}
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-            onKeyDown={(e) => handleSearchKeyDown(e)}
-            isDisabled={activeTab !== "images"}
-          />
-
-          <NavbarContent justify="end">
-            <NavbarItem>
-              <Button
-                isIconOnly
-                variant="flat"
-                color="primary"
-                onClick={handleSearch}
-                isDisabled={activeTab !== "images"}
-              >
-                <SearchIcon className="text-[#2F6EE7] mb-0.5 dark:text-white/90 text-slate-450 pointer-events-none flex-shrink-0" />
-              </Button>
-            </NavbarItem>
-          </NavbarContent>
-        </Navbar>
+        </div>
+        <div className="pp-resource-content">
+          {activeTab === "images" && renderImagePanel()}
+          {activeTab === "colors" && renderColorPanel()}
+          {activeTab === "patterns" && renderPatternPanel()}
+        </div>
       </div>
     </div>
   );
