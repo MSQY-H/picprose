@@ -8,7 +8,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # 关键：授予写入权限
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,9 +38,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile --ignore-workspace
 
-      - name: Build
+      - name: Build and Export
         run: pnpm build
 
       - name: Deploy to GitHub Pages
