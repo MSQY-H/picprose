@@ -5,7 +5,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
-  basePath: '/picprose',
+  // 根据环境变量动态设置 basePath
+  basePath: process.env.CF_PAGES ? '' : '/picprose',
+  assetPrefix: process.env.CF_PAGES ? '' : '/picprose',
 };
 
 export default nextConfig;
