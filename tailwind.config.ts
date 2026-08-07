@@ -17,6 +17,9 @@ const config: Config = {
       },
       fontFamily: {
         // 👇 Add CSS variables
+        //+
+        hm: ["var(--font-hm)"],
+        //e
         sans: ["var(--font-opensans)"],
         mono: ["var(--font-roboto-mono)"],
         anke: ["var(--font-anke)"],

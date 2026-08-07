@@ -136,7 +136,7 @@ interface PicproseContextType {
 // Create default image information
 const defaultImageInfo: ImageInfo = {
   url: "stacked-waves.svg",
-  name: "LiuShen Cover",
+  name: "MSQY Cover",
   avatar: "default-author.jpg",
   profile: "default",
   downloadLink: "",

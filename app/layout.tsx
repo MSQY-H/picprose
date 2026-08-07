@@ -4,6 +4,14 @@ import { Providers } from "./providers";
 import { Open_Sans, Roboto_Mono, Anek_Latin } from "next/font/google";
 import localFont from "next/font/local";
 
+//+
+const HMFont = localFont({
+  src: "fonts/HarmonyOS_Sans_SC_Medium.ttf",
+  display: "swap",
+  variable: "--font-hm",
+});
+//e
+
 const dingTalkFont = localFont({
   src: "fonts/DingTalk JinBuTi.ttf",
   display: "swap",
@@ -47,15 +55,15 @@ const ankeLatin = Anek_Latin({
 });
 
 export const metadata: Metadata = {
-  title: "LiuShen Cover - Better Cover Image Generator Tools",
-  description: "LiuShen Cover is a better cover image generator tool for Medium, YouTube, BiliBili, Blog and more.",
+  title: "MSQY Cover - Better Cover Image Generator Tools",
+  description: "MSQY Cover is a better cover image generator tool for Medium, YouTube, BiliBili, Blog and more. Edit from LiuShen-Fork/picprose",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="zh-CN"
-      className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} font-sans light`}
+      className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} ${HMFont.variable} font-sans light`}
     >
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />

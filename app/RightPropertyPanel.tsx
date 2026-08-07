@@ -291,6 +291,7 @@ export const RightPropertyPanel = () => {
 
   const fontOptions = [
     { label: "钉钉进步体", value: "font-dingtalk" },
+    { label: "鸿蒙黑体", value: "font-hm" },
     { label: "阿里巴巴普惠体", value: "font-alibaba" },
     { label: "Open Sans", value: "font-opensans" },
     { label: "Anek Latin", value: "font-anke" },
@@ -497,7 +498,7 @@ export const RightPropertyPanel = () => {
           </NavbarBrand>
           <NavbarContent justify="end">
             <NavbarItem>
-              <Button as={Link} color="primary" variant="flat" target="_blank" href="https://github.com/LiuShen-Fork/picprose" className="pp-button gap-2 px-3">
+              <Button as={Link} color="primary" variant="flat" target="_blank" href="https://github.com/MSQY-H/picprose" className="pp-button gap-2 px-3">
                 <i className="devicon-github-plain text-[#2F6EE7] dev-icon text-xl" />
                 GitHub
               </Button>
@@ -596,11 +597,16 @@ export const RightPropertyPanel = () => {
 
           <div className="pp-section">
             <div className="pp-section-title mb-2">{t("download")}</div>
-            <div className="grid grid-cols-3 gap-2">
-              <Button onClick={() => downloadImage("jpg")} as={Link} color="primary" variant="flat" className="pp-button">JPG</Button>
-              <Button onClick={() => downloadImage("png")} as={Link} color="primary" variant="flat" className="pp-button">PNG</Button>
-              <Button onClick={() => downloadImage("svg")} as={Link} color="primary" variant="flat" className="pp-button">SVG</Button>
-            </div>
+            <div className="grid grid-cols-4 gap-2">
+  <Button onClick={() => downloadImage("jpg")} as={Link} color="primary" variant="flat" className="pp-button">JPG</Button>
+  <Button onClick={() => downloadImage("png")} as={Link} color="primary" variant="flat" className="pp-button">PNG</Button>
+  <Button onClick={() => downloadImage("svg")} as={Link} color="primary" variant="flat" className="pp-button">SVG</Button>
+  <Button onClick={() => downloadImage("webp")} as={Link} color="primary" variant="flat" className="pp-button">WEBP</Button>
+</div>
+<div className="text-center text-xs text-slate-400 py-4 border-t border-slate-200/50 mt-4">
+            由 MSQY 基于 LiuShen-Fork/picprose 二次修改而来。<br />
+            最上游仓库为 pixpark/picprose。
+          </div>
           </div>
         </div>
       </div>
