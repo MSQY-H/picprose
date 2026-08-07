@@ -5,6 +5,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  basePath: '/picprose',
 };
 
 export default nextConfig;
