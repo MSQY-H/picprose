@@ -181,8 +181,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {/* 加载页面 */}
-        <div id="loading-state" role="alert" aria-live="assertive">
+        {/* 加载页面 - 添加 suppressHydrationWarning 忽略属性差异 */}
+        <div
+          id="loading-state"
+          role="alert"
+          aria-live="assertive"
+          suppressHydrationWarning
+        >
           <div className="message">
             <div className="logo-text">MSQY Cover</div>
             <div className="loading-bar-container">
@@ -202,6 +207,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   if (window._redirectNotified) return;
                   window._redirectNotified = true;
 
+                  // 延迟弹窗，确保 hydration 完成
                   setTimeout(function() {
                     if (document.querySelector('#redirect-overlay')) return;
 
@@ -232,7 +238,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     document.getElementById('stay-btn').addEventListener('click', function() {
                       overlay.remove();
                     });
-                  }, 100);
+                  }, 150); // 增加延迟确保 hydration 完成
                 }
 
                 function init() {
@@ -280,8 +286,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   xhr.send();
                 }
 
-                init();
+                // 等待 hydration 完成后再执行检测（延迟到下一个宏任务）
+                setTimeout(init, 0);
 
+                // 隐藏加载页面（在 load 事件后）
                 function hideLoader() {
                   if (loader) {
                     loader.classList.add('hide');
@@ -296,6 +304,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   });
                 }
 
+                // 超时强制隐藏（以防万一）
                 setTimeout(function() {
                   if (loader && !loader.classList.contains('hide')) {
                     console.log('[Redirect] 强制隐藏加载页面（超时）');

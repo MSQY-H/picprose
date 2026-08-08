@@ -134,10 +134,6 @@ export const ImageEditor = ({
     }
   }, [isDragMode, containerRef.current?.clientWidth, containerRef.current?.clientHeight]);
 
-
-
-
-  
   // Element drag start
   const handleElementDragStart = (element: DraggableElement, e: React.MouseEvent) => {
     if (!isDragMode) return;
@@ -272,6 +268,8 @@ export const ImageEditor = ({
   const renderBackground = () => {
     switch (backgroundType) {
       case 'image':
+        // 修复：如果图片 URL 为空，则不渲染 <img>，避免 src 为空警告
+        if (!imageInfo.url) return null;
         return (
           <img
             ref={imageRef}
@@ -522,7 +520,7 @@ export const ImageEditor = ({
       </div>
 
       {/* Image author information */}
-      {backgroundType === 'image' && (
+      {backgroundType === 'image' && imageInfo.url && (
         <div className="absolute bottom-4 right-4 z-20 opacity-90 pointer-events-none">
           <div className="group-hover:flex hidden items-center">
             <span className="text-sm text-white mx-2">Photo by</span>
