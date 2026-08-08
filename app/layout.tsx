@@ -98,7 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 pointer-events: none;
               }
               #loading-state.semi-transparent {
-                opacity: 0.5;
+                opacity: 0.85;
               }
 
               .dark-mode #loading-state {
@@ -202,7 +202,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
 
-        {/* ===== 分流脚本（原生 <script>，只使用 ip-api.com） ===== */}
+        {/* ===== 分流脚本（原生 <script>，使用多服务查询） ===== */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -262,53 +262,119 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   console.log('[Redirect] 调试模式：显示无法识别弹窗');
                   showNotification('unknown');
                 } else if (isGithubIo || isLocal) {
-                  console.log('[Redirect] 目标域名，开始请求 ip-api.com');
-                  var completed = false;
-                  var xhr = new XMLHttpRequest();
-                  xhr.open('GET', 'http://ip-api.com/json/?lang=zh-CN', true);
-                  xhr.timeout = 3000;
-                  xhr.onload = function() {
-                    console.log('[Redirect] 响应状态码:', xhr.status);
-                    if (xhr.status === 200) {
-                      try {
-                        var data = JSON.parse(xhr.responseText);
-                        console.log('[Redirect] 返回数据:', data);
-                        if (data.country === '中国') {
-                          console.log('[Redirect] IP 归属中国，显示弹窗');
-                          showNotification('china');
-                          completed = true;
-                        } else {
-                          console.log('[Redirect] IP 非中国');
-                          completed = true;
-                        }
-                      } catch (e) {
-                        console.debug('[Redirect] 解析失败:', e);
-                        showNotification('unknown');
-                        completed = true;
+                  console.log('[Redirect] 目标域名，开始多服务IP查询');
+
+                  // ----- 服务列表（按优先级排列，已修正解析） -----
+                  var services = [
+                    {
+                      // 首选：LoliApi（支持 HTTPS）
+                      url: 'https://www.loliapi.com/getip/',
+                      parse: function(data) {
+                        // 实际返回：{ ip: "...", country: "CN", city: "Guangzhou", continent: "AS" }
+                        return data && (data.country === 'CN' || data.country === '中国');
                       }
-                    } else {
-                      console.debug('[Redirect] 状态码异常，显示无法识别');
+                    },
+                    {
+                      // 备选1：ip-api.com (HTTP)
+                      url: 'http://ip-api.com/json/?lang=zh-CN',
+                      parse: function(data) {
+                        return data && data.country === '中国';
+                      }
+                    },
+                    {
+                      // 备选2：ip9.com.cn (支持 HTTPS)
+                      url: 'https://ip9.com.cn/get',
+                      parse: function(data) {
+                        return data && data.data && (data.data.country === '中国' || data.data.country_code === 'cn');
+                      }
+                    },
+                    {
+                      // 备选3：ip-api.com 带额外参数
+                      url: 'http://ip-api.com/json/?fields=country',
+                      parse: function(data) {
+                        return data && data.country === 'China';
+                      }
+                    }
+                  ];
+
+                  var completed = false;
+                  var currentIndex = 0;
+
+                  function tryNextService() {
+                    if (currentIndex >= services.length) {
+                      console.debug('[Redirect] 所有服务均失败，显示无法识别');
+                      showNotification('unknown');
+                      return;
+                    }
+
+                    var service = services[currentIndex];
+                    console.log('[Redirect] 尝试服务 [' + (currentIndex + 1) + '/' + services.length + ']:', service.url);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', service.url, true);
+                    xhr.timeout = 3000;
+
+                    xhr.onload = function() {
+                      console.log('[Redirect] 服务响应状态:', xhr.status);
+                      if (xhr.status === 200) {
+                        try {
+                          var data = JSON.parse(xhr.responseText);
+                          console.log('[Redirect] 返回数据:', data);
+                          if (service.parse(data)) {
+                            console.log('[Redirect] IP 归属中国，显示弹窗');
+                            showNotification('china');
+                            completed = true;
+                            return;
+                          } else {
+                            console.log('[Redirect] IP 非中国');
+                            completed = true;
+                            return;
+                          }
+                        } catch (e) {
+                          console.debug('[Redirect] 解析失败:', e);
+                          currentIndex++;
+                          tryNextService();
+                        }
+                      } else {
+                        console.debug('[Redirect] 状态码异常，尝试下一个');
+                        currentIndex++;
+                        tryNextService();
+                      }
+                    };
+
+                    xhr.onerror = function() {
+                      console.debug('[Redirect] 网络错误，尝试下一个');
+                      currentIndex++;
+                      tryNextService();
+                    };
+
+                    xhr.ontimeout = function() {
+                      console.debug('[Redirect] 超时，尝试下一个');
+                      currentIndex++;
+                      tryNextService();
+                    };
+
+                    xhr.send();
+                    console.log('[Redirect] 请求已发送');
+                  }
+
+                  // 开始尝试第一个服务
+                  tryNextService();
+
+                  // 整体超时保护（10秒后如果还没完成，强制显示无法识别）
+                  setTimeout(function() {
+                    if (!completed) {
+                      console.debug('[Redirect] 整体查询超时，显示无法识别');
                       showNotification('unknown');
                       completed = true;
                     }
-                  };
-                  xhr.onerror = function() {
-                    console.debug('[Redirect] 网络错误，显示无法识别');
-                    showNotification('unknown');
-                    completed = true;
-                  };
-                  xhr.ontimeout = function() {
-                    console.debug('[Redirect] 超时，显示无法识别');
-                    showNotification('unknown');
-                    completed = true;
-                  };
-                  xhr.send();
-                  console.log('[Redirect] 请求已发送');
+                  }, 10000);
+
                 } else {
                   console.log('[Redirect] 非目标域名，跳过');
                 }
 
-                // 加载页面隐藏逻辑
+                // 加载页面隐藏逻辑（等待 load 事件，超时半透明）
                 function hideLoader() {
                   if (loader) {
                     loader.classList.add('hide');
