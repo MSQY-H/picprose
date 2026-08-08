@@ -4,13 +4,12 @@ import { Providers } from "./providers";
 import { Open_Sans, Roboto_Mono, Anek_Latin } from "next/font/google";
 import localFont from "next/font/local";
 
-//+
+// 字体配置
 const HMFont = localFont({
   src: "fonts/HarmonyOS_Sans_SC_Medium.ttf",
   display: "swap",
   variable: "--font-hm",
 });
-//e
 
 const dingTalkFont = localFont({
   src: "fonts/DingTalk JinBuTi.ttf",
@@ -61,19 +60,254 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="zh-CN"
-      className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} ${HMFont.variable} font-sans light`}
-    >
+    <html lang="zh-CN" className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} ${HMFont.variable} font-sans light`}>
       <head>
+        {/* Favicon 配置 */}
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
+
+        {/* 加载页面样式 */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              * { box-sizing: border-box; }
+              html { -webkit-font-smoothing: antialiased; }
+              body, html { margin: 0; padding: 0; }
+
+              #loading-state {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: #ffffff;
+                opacity: 1;
+                transition: opacity 0.3s ease-out;
+              }
+              #loading-state.hide {
+                opacity: 0;
+                pointer-events: none;
+              }
+
+              .dark-mode #loading-state {
+                background: #0a0a0a;
+              }
+              .dark-mode body {
+                background-color: #0a0a0a;
+                color: #d9d9d9;
+              }
+
+              .message {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                margin: 0;
+              }
+              .message .logo-text {
+                font-size: 36px;
+                font-weight: 700;
+                color: #2563eb;
+                letter-spacing: -0.5px;
+                margin-bottom: 20px;
+                font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+              }
+              .dark-mode .message .logo-text {
+                color: #60a5fa;
+              }
+
+              .loading-bar-container {
+                width: 116px;
+                height: 4px;
+                background: #e5e5e5;
+                border-radius: 2px;
+                overflow: hidden;
+                margin-top: 6px;
+                transform: translateX(-4.5px);
+              }
+              .dark-mode .loading-bar-container {
+                background: #333;
+              }
+              .loading-bar {
+                width: 25%;
+                height: 100%;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #2563eb 45%,
+                  #2563eb 55%,
+                  transparent
+                );
+                border-radius: 2px;
+                animation: loading-bar 1.5s ease-in-out infinite;
+              }
+              @keyframes loading-bar {
+                0% { transform: translateX(-100%); }
+                50% { transform: translateX(400%); }
+                100% { transform: translateX(-100%); }
+              }
+              @media screen and (prefers-reduced-motion: reduce) {
+                .loading-bar {
+                  animation: none;
+                  transform: translateX(0);
+                }
+              }
+            `,
+          }}
+        />
+
+        {/* 暗色模式检测 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if ( localStorage.getItem('dark-mode') === 'on' ||
+                     (localStorage.getItem('dark-mode') === 'system' &&
+                      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                   ) {
+                  document.documentElement.classList.add('dark-mode');
+                  document.documentElement.setAttribute('data-mode', 'dark');
+                }
+              } catch (err) {}
+            `,
+          }}
+        />
       </head>
       <body>
+        {/* 加载页面 */}
+        <div id="loading-state" role="alert" aria-live="assertive">
+          <div className="message">
+            <div className="logo-text">MSQY Cover</div>
+            <div className="loading-bar-container">
+              <div className="loading-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* 分流脚本 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var loader = document.getElementById('loading-state');
+
+                function showNotification() {
+                  if (window._redirectNotified) return;
+                  window._redirectNotified = true;
+
+                  setTimeout(function() {
+                    if (document.querySelector('#redirect-overlay')) return;
+
+                    var overlay = document.createElement('div');
+                    overlay.id = 'redirect-overlay';
+                    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;' +
+                      'background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;';
+
+                    var modal = document.createElement('div');
+                    modal.style.cssText = 'background:#fff;padding:30px 40px;border-radius:12px;' +
+                      'max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+
+                    modal.innerHTML =
+                      '<h2 style="margin:0 0 12px;font-size:20px;color:#1a1a2e;">温馨提示</h2>' +
+                      '<p style="margin:0 0 8px;font-size:15px;color:#333;line-height:1.6;">为获得更流畅的访问体验，建议您前往</p>' +
+                      '<p style="margin:0 0 20px;font-size:18px;font-weight:bold;color:#2563eb;">cover.msqy.cc.cd</p>' +
+                      '<div style="display:flex;gap:12px;justify-content:center;">' +
+                        '<button id="redirect-btn" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;">立即前往</button>' +
+                        '<button id="stay-btn" style="padding:10px 28px;background:#e5e7eb;color:#374151;border:none;border-radius:8px;font-size:15px;cursor:pointer;">留在本页</button>' +
+                      '</div>';
+
+                    overlay.appendChild(modal);
+                    document.body.appendChild(overlay);
+
+                    document.getElementById('redirect-btn').addEventListener('click', function() {
+                      window.location.href = 'https://cover.msqy.cc.cd';
+                    });
+                    document.getElementById('stay-btn').addEventListener('click', function() {
+                      overlay.remove();
+                    });
+                  }, 100);
+                }
+
+                function init() {
+                  var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                  var isGithubIo = window.location.hostname.endsWith('.github.io');
+
+                  console.log('[Redirect] 域名:', window.location.hostname, 'isLocal:', isLocal, 'isGithubIo:', isGithubIo);
+
+                  if (isLocal) {
+                    console.log('[Redirect] 本地环境，显示弹窗');
+                    showNotification();
+                    return;
+                  }
+
+                  if (!isGithubIo) {
+                    console.log('[Redirect] 非 github.io 域名，退出');
+                    return;
+                  }
+
+                  console.log('[Redirect] 查询 IP 归属地...');
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', 'https://ip9.com.cn/get', true);
+                  xhr.timeout = 3000;
+                  xhr.onload = function() {
+                    if (xhr.status === 200) {
+                      try {
+                        var response = JSON.parse(xhr.responseText);
+                        console.log('[Redirect] IP 查询结果:', response);
+                        if (response.data && (response.data.country === '中国' || response.data.country_code === 'cn')) {
+                          console.log('[Redirect] 中国大陆用户，显示弹窗');
+                          showNotification();
+                        } else {
+                          console.log('[Redirect] 非中国大陆 IP');
+                        }
+                      } catch (e) {
+                        console.warn('[Redirect] 解析失败:', e);
+                      }
+                    } else {
+                      console.warn('[Redirect] 查询失败，状态码:', xhr.status);
+                    }
+                  };
+                  xhr.onerror = function() {
+                    console.warn('[Redirect] 网络错误');
+                  };
+                  xhr.send();
+                }
+
+                init();
+
+                function hideLoader() {
+                  if (loader) {
+                    loader.classList.add('hide');
+                  }
+                }
+
+                if (document.readyState === 'complete') {
+                  setTimeout(hideLoader, 200);
+                } else {
+                  window.addEventListener('load', function() {
+                    setTimeout(hideLoader, 300);
+                  });
+                }
+
+                setTimeout(function() {
+                  if (loader && !loader.classList.contains('hide')) {
+                    console.log('[Redirect] 强制隐藏加载页面（超时）');
+                    loader.classList.add('hide');
+                  }
+                }, 4000);
+              })();
+            `,
+          }}
+        />
+
+        {/* React 应用 */}
         <Providers>{children}</Providers>
       </body>
     </html>
