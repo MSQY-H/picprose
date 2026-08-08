@@ -1,0 +1,19 @@
+1:"$Sreact.fragment"
+2:I[47350,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"ClientPageRoot"]
+3:I[31713,["/picprose/_next/static/chunks/08x19gw7a_n2o.js","/picprose/_next/static/chunks/3s8mb_nr0gl2r.js","/picprose/_next/static/chunks/1r56226ewr4cy.js"],"default"]
+6:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+b:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"ViewportBoundary"]
+c:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"MetadataBoundary"]
+:HL["/picprose/_next/static/chunks/1xebheq8x51wn.css","style"]
+a:X
+0:{"buildId":"yxZWX2j0G22mQd6C_jLwJ","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","link","0",{"rel":"stylesheet","href":"/picprose/_next/static/chunks/1xebheq8x51wn.css","precedence":"next"}],["$","script","script-0",{"src":"/picprose/_next/static/chunks/3s8mb_nr0gl2r.js","async":true}],["$","script","script-1",{"src":"/picprose/_next/static/chunks/1r56226ewr4cy.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":"$@9","staleTime":"$a","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$Lb",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"MSQY Cover - Better Cover Image Generator Tools"}],["$","meta","1",{"name":"description","content":"MSQY Cover is a better cover image generator tool for Medium, YouTube, BiliBili, Blog and more. Edit from LiuShen-Fork/picprose"}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@d","staleTime":"$a","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@e","rootVaryParams":null,"needsRuntimeRequest":"$@f"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
+f:true
+a:300
+a:C
+e:0
+d:"$undefined"
+9:"$undefined"

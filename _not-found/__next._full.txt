@@ -1,0 +1,308 @@
+1:"$Sreact.fragment"
+9:I[80289,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"default",1]
+:HL["/picprose/_next/static/chunks/3rj8b88wdizkd.css","style"]
+2:Tb6a,
+              * { box-sizing: border-box; }
+              html { -webkit-font-smoothing: antialiased; }
+              body, html { margin: 0; padding: 0; }
+
+              #loading-state {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: #ffffff;
+                opacity: 1;
+                transition: opacity 0.6s ease;
+              }
+              #loading-state.hide {
+                opacity: 0;
+                pointer-events: none;
+              }
+              #loading-state.semi-transparent {
+                opacity: 0.85;
+              }
+
+              .dark-mode #loading-state {
+                background: #0a0a0a;
+              }
+              .dark-mode body {
+                background-color: #0a0a0a;
+                color: #d9d9d9;
+              }
+
+              .message {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                margin: 0;
+              }
+              .message .logo-text {
+                font-size: 36px;
+                font-weight: 700;
+                color: #2563eb;
+                letter-spacing: -0.5px;
+                margin-bottom: 20px;
+                font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+              }
+              .dark-mode .message .logo-text {
+                color: #60a5fa;
+              }
+
+              .loading-bar-container {
+                width: 116px;
+                height: 4px;
+                background: #e5e5e5;
+                border-radius: 2px;
+                overflow: hidden;
+                margin-top: 6px;
+                transform: translateX(-4.5px);
+              }
+              .dark-mode .loading-bar-container {
+                background: #333;
+              }
+              .loading-bar {
+                width: 25%;
+                height: 100%;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #2563eb 45%,
+                  #2563eb 55%,
+                  transparent
+                );
+                border-radius: 2px;
+                animation: loading-bar 1.5s ease-in-out infinite;
+              }
+              @keyframes loading-bar {
+                0% { transform: translateX(-100%); }
+                50% { transform: translateX(400%); }
+                100% { transform: translateX(-100%); }
+              }
+              @media screen and (prefers-reduced-motion: reduce) {
+                .loading-bar {
+                  animation: none;
+                  transform: translateX(0);
+                }
+              }
+            7:X
+0:{"P":null,"c":["","_not-found"],"q":"","i":false,"f":[[["",{"children":["/_not-found",{"children":["__PAGE__",{},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4624],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/picprose/_next/static/chunks/3rj8b88wdizkd.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/picprose/_next/static/chunks/08x19gw7a_n2o.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"zh-CN","className":"open_sans_5d9c7122-module__eo3OpG__variable roboto_mono_e5a3c256-module__oHMDmG__variable anek_latin_f5918b51-module__7HTUvG__variable dingtalkfont_6774237a-module__m2-Sdq__variable kingsoftfont_1805291a-module__ZQcnNG__variable xinyiguanheifont_535f6293-module__m42MlW__variable alibabafont_79ae9053-module__BKE9PW__variable hmfont_2c7bdaca-module__lyWHmW__variable font-sans light","children":[["$","head",null,{"children":[["$","link",null,{"rel":"apple-touch-icon","sizes":"180x180","href":"/favicon/apple-touch-icon.png"}],["$","link",null,{"rel":"icon","type":"image/png","sizes":"32x32","href":"/favicon/favicon-32x32.png"}],["$","link",null,{"rel":"icon","type":"image/png","sizes":"16x16","href":"/favicon/favicon-16x16.png"}],["$","link",null,{"rel":"manifest","href":"/favicon/site.webmanifest"}],["$","meta",null,{"name":"msapplication-TileColor","content":"#da532c"}],["$","meta",null,{"name":"theme-color","content":"#ffffff"}],["$","link",null,{"rel":"canonical","href":"https://msqy-h.github.io/picprose/"}],["$","style",null,{"dangerouslySetInnerHTML":{"__html":"$2"}}],"$L3"]}],"$L4"]}]]}],{"children":["$L5",{"children":["$L6",{},null,false,null]},null,false,"$7"]},null,false,null],"$L8",false]],"m":"$undefined","G":["$9",["$La"]],"S":true,"h":null,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"yxZWX2j0G22mQd6C_jLwJ"}
+d:I[13598,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"default"]
+e:I[43384,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"default"]
+f:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+12:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"ViewportBoundary"]
+14:I[45451,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"MetadataBoundary"]
+3:["$","script",null,{"dangerouslySetInnerHTML":{"__html":"\n              try {\n                if ( localStorage.getItem('dark-mode') === 'on' ||\n                     (localStorage.getItem('dark-mode') === 'system' &&\n                      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)\n                   ) {\n                  document.documentElement.classList.add('dark-mode');\n                  document.documentElement.setAttribute('data-mode', 'dark');\n                }\n              } catch (err) {}\n            "}}]
+b:T2500,
+              (function() {
+                console.log('[Redirect] 脚本已开始执行');
+                var loader = document.getElementById('loading-state');
+                var isGithubIo = window.location.hostname.endsWith('.github.io');
+                var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                var isDebug = window.location.search.includes('debug=true');
+
+                console.log('[Redirect] 域名:', window.location.hostname, 'isGithubIo:', isGithubIo, 'isLocal:', isLocal);
+
+                // 通用弹窗函数（样式统一）
+                function showNotification(type) {
+                  if (window._redirectNotified) return;
+                  window._redirectNotified = true;
+                  setTimeout(function() {
+                    if (document.querySelector('#redirect-overlay')) return;
+                    var overlay = document.createElement('div');
+                    overlay.id = 'redirect-overlay';
+                    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;' +
+                      'background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;';
+                    var modal = document.createElement('div');
+                    modal.style.cssText = 'background:#fff;padding:30px 40px;border-radius:12px;' +
+                      'max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
+
+                    var title, content;
+                    if (type === 'china') {
+                      title = '检测到您为中国大陆用户';
+                      content = '为获得更流畅的访问体验，建议您前往';
+                    } else {
+                      title = '无法识别您的位置';
+                      content = '如果您是中国大陆用户，建议访问镜像站点';
+                    }
+
+                    modal.innerHTML =
+                      '<h2 style="margin:0 0 12px;font-size:20px;color:#1a1a2e;">' + title + '</h2>' +
+                      '<p style="margin:0 0 8px;font-size:15px;color:#333;line-height:1.6;">' + content + '</p>' +
+                      '<p style="margin:0 0 20px;font-size:18px;font-weight:bold;color:#2563eb;">cover.msqy.cc.cd</p>' +
+                      '<div style="display:flex;gap:12px;justify-content:center;">' +
+                        '<button id="redirect-btn" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;">立即前往</button>' +
+                        '<button id="stay-btn" style="padding:10px 28px;background:#e5e7eb;color:#374151;border:none;border-radius:8px;font-size:15px;cursor:pointer;">留在本页</button>' +
+                      '</div>';
+                    overlay.appendChild(modal);
+                    document.body.appendChild(overlay);
+                    document.getElementById('redirect-btn').addEventListener('click', function() {
+                      window.location.href = 'https://cover.msqy.cc.cd';
+                    });
+                    document.getElementById('stay-btn').addEventListener('click', function() {
+                      overlay.remove();
+                    });
+                  }, 200);
+                }
+
+                // 主逻辑
+                if (isDebug) {
+                  console.log('[Redirect] 调试模式：显示无法识别弹窗');
+                  showNotification('unknown');
+                } else if (isGithubIo || isLocal) {
+                  console.log('[Redirect] 目标域名，开始多服务IP查询');
+
+                  // ----- 服务列表（按优先级排列，已修正解析） -----
+                  var services = [
+                    {
+                      // 首选：LoliApi（支持 HTTPS）
+                      url: 'https://www.loliapi.com/getip/',
+                      parse: function(data) {
+                        // 实际返回：{ ip: "...", country: "CN", city: "Guangzhou", continent: "AS" }
+                        return data && (data.country === 'CN' || data.country === '中国');
+                      }
+                    },
+                    {
+                      // 备选1：ip-api.com (HTTP)
+                      url: 'http://ip-api.com/json/?lang=zh-CN',
+                      parse: function(data) {
+                        return data && data.country === '中国';
+                      }
+                    },
+                    {
+                      // 备选2：ip9.com.cn (支持 HTTPS)
+                      url: 'https://ip9.com.cn/get',
+                      parse: function(data) {
+                        return data && data.data && (data.data.country === '中国' || data.data.country_code === 'cn');
+                      }
+                    },
+                    {
+                      // 备选3：ip-api.com 带额外参数
+                      url: 'http://ip-api.com/json/?fields=country',
+                      parse: function(data) {
+                        return data && data.country === 'China';
+                      }
+                    }
+                  ];
+
+                  var completed = false;
+                  var currentIndex = 0;
+
+                  function tryNextService() {
+                    if (currentIndex >= services.length) {
+                      console.debug('[Redirect] 所有服务均失败，显示无法识别');
+                      showNotification('unknown');
+                      return;
+                    }
+
+                    var service = services[currentIndex];
+                    console.log('[Redirect] 尝试服务 [' + (currentIndex + 1) + '/' + services.length + ']:', service.url);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', service.url, true);
+                    xhr.timeout = 3000;
+
+                    xhr.onload = function() {
+                      console.log('[Redirect] 服务响应状态:', xhr.status);
+                      if (xhr.status === 200) {
+                        try {
+                          var data = JSON.parse(xhr.responseText);
+                          console.log('[Redirect] 返回数据:', data);
+                          if (service.parse(data)) {
+                            console.log('[Redirect] IP 归属中国，显示弹窗');
+                            showNotification('china');
+                            completed = true;
+                            return;
+                          } else {
+                            console.log('[Redirect] IP 非中国');
+                            completed = true;
+                            return;
+                          }
+                        } catch (e) {
+                          console.debug('[Redirect] 解析失败:', e);
+                          currentIndex++;
+                          tryNextService();
+                        }
+                      } else {
+                        console.debug('[Redirect] 状态码异常，尝试下一个');
+                        currentIndex++;
+                        tryNextService();
+                      }
+                    };
+
+                    xhr.onerror = function() {
+                      console.debug('[Redirect] 网络错误，尝试下一个');
+                      currentIndex++;
+                      tryNextService();
+                    };
+
+                    xhr.ontimeout = function() {
+                      console.debug('[Redirect] 超时，尝试下一个');
+                      currentIndex++;
+                      tryNextService();
+                    };
+
+                    xhr.send();
+                    console.log('[Redirect] 请求已发送');
+                  }
+
+                  // 开始尝试第一个服务
+                  tryNextService();
+
+                  // 整体超时保护（10秒后如果还没完成，强制显示无法识别）
+                  setTimeout(function() {
+                    if (!completed) {
+                      console.debug('[Redirect] 整体查询超时，显示无法识别');
+                      showNotification('unknown');
+                      completed = true;
+                    }
+                  }, 10000);
+
+                } else {
+                  console.log('[Redirect] 非目标域名，跳过');
+                }
+
+                // 加载页面隐藏逻辑（等待 load 事件，超时半透明）
+                function hideLoader() {
+                  if (loader) {
+                    loader.classList.add('hide');
+                    loader.classList.remove('semi-transparent');
+                  }
+                }
+
+                if (document.readyState === 'complete') {
+                  setTimeout(hideLoader, 100);
+                } else {
+                  window.addEventListener('load', function() {
+                    setTimeout(hideLoader, 200);
+                  });
+                }
+
+                var timeoutId = setTimeout(function() {
+                  if (loader && !loader.classList.contains('hide')) {
+                    console.log('[Redirect] 加载超时，变为半透明');
+                    loader.classList.add('semi-transparent');
+                  }
+                }, 8000);
+
+                window.addEventListener('load', function() {
+                  clearTimeout(timeoutId);
+                });
+              })();
+            4:["$","body",null,{"children":[["$","div",null,{"id":"loading-state","role":"alert","aria-live":"assertive","suppressHydrationWarning":true,"children":["$","div",null,{"className":"message","children":[["$","div",null,{"className":"logo-text","children":"MSQY Cover"}],["$","div",null,{"className":"loading-bar-container","children":["$","div",null,{"className":"loading-bar"}]}]]}]}],["$","script",null,{"dangerouslySetInnerHTML":{"__html":"$b"}}],"$Lc"]}]
+5:["$","$1","c",{"children":[null,["$","$Ld",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$Le",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}]
+6:["$","$1","c",{"children":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],null,["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]]}]
+8:["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L12",null,{"children":"$L13"}],["$","div",null,{"hidden":true,"children":["$","$L14",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L15"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+a:["$","link","0",{"rel":"stylesheet","href":"/picprose/_next/static/chunks/3rj8b88wdizkd.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+16:I[96923,["/picprose/_next/static/chunks/08x19gw7a_n2o.js"],"Providers"]
+7:C
+c:["$","$L16",null,{"children":["$","$Ld",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$Le",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":"$6:props:children:0:1:props:style","children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":"$6:props:children:0:1:props:children:props:children:1:props:style","children":404}],["$","div",null,{"style":"$6:props:children:0:1:props:children:props:children:2:props:style","children":["$","h2",null,{"style":"$6:props:children:0:1:props:children:props:children:2:props:children:props:style","children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]
+13:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+11:null
+15:[["$","title","0",{"children":"MSQY Cover - Better Cover Image Generator Tools"}],["$","meta","1",{"name":"description","content":"MSQY Cover is a better cover image generator tool for Medium, YouTube, BiliBili, Blog and more. Edit from LiuShen-Fork/picprose"}]]
