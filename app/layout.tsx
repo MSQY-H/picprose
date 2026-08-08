@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Open_Sans, Roboto_Mono, Anek_Latin } from "next/font/google";
@@ -74,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* 规范站点（SEO canonical） */}
         <link rel="canonical" href="https://msqy-h.github.io/picprose/" />
 
-        {/* 加载页面样式（不含横幅） */}
+        {/* 加载页面样式 */}
         <style
           dangerouslySetInnerHTML={{
             __html: `
@@ -203,19 +202,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
 
-        {/* 分流与定位脚本（使用 next/script，beforeInteractive） */}
-        <Script
-          id="redirect-and-location"
-          strategy="beforeInteractive"
+        {/* ===== 分流脚本（原生 <script>，只使用 ip-api.com） ===== */}
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                console.log('[Redirect] 脚本已开始执行');
                 var loader = document.getElementById('loading-state');
                 var isGithubIo = window.location.hostname.endsWith('.github.io');
                 var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 var isDebug = window.location.search.includes('debug=true');
 
-                // ----- 通用弹窗函数（可指定类型） -----
+                console.log('[Redirect] 域名:', window.location.hostname, 'isGithubIo:', isGithubIo, 'isLocal:', isLocal);
+
+                // 通用弹窗函数（样式统一）
                 function showNotification(type) {
                   if (window._redirectNotified) return;
                   window._redirectNotified = true;
@@ -228,12 +228,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     var modal = document.createElement('div');
                     modal.style.cssText = 'background:#fff;padding:30px 40px;border-radius:12px;' +
                       'max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);';
-                    
+
                     var title, content;
                     if (type === 'china') {
                       title = '检测到您为中国大陆用户';
                       content = '为获得更流畅的访问体验，建议您前往';
-                    } else { // 'unknown'
+                    } else {
                       title = '无法识别您的位置';
                       content = '如果您是中国大陆用户，建议访问镜像站点';
                     }
@@ -257,90 +257,58 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   }, 200);
                 }
 
-                // ----- 主逻辑 -----
+                // 主逻辑
                 if (isDebug) {
                   console.log('[Redirect] 调试模式：显示无法识别弹窗');
                   showNotification('unknown');
                 } else if (isGithubIo || isLocal) {
+                  console.log('[Redirect] 目标域名，开始请求 ip-api.com');
                   var completed = false;
-                  var services = [
-                    {
-                      url: 'http://ip-api.com/json/?lang=zh-CN',
-                      parse: function(data) { return data.country === '中国'; }
-                    },
-                    {
-                      url: 'https://api.vore.top/api/IPdata',
-                      parse: function(data) { return data?.ip?.country === '中国'; }
-                    },
-                    {
-                      url: 'https://api.xxapi.cn/ip',
-                      parse: function(data) { return data?.data?.address?.includes('中国'); }
-                    },
-                    {
-                      url: 'https://ip9.com.cn/get',
-                      parse: function(data) { return data.data && (data.data.country === '中国' || data.data.country_code === 'cn'); }
-                    }
-                  ];
-
-                  function tryService(index) {
-                    if (index >= services.length) {
-                      console.debug('[Redirect] 所有IP查询失败，显示无法识别');
-                      showNotification('unknown');
-                      return;
-                    }
-                    var service = services[index];
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', service.url, true);
-                    xhr.timeout = 3000;
-                    xhr.onload = function() {
-                      if (xhr.status === 200) {
-                        try {
-                          var data = JSON.parse(xhr.responseText);
-                          if (service.parse(data)) {
-                            console.log('[Redirect] IP 归属中国，显示弹窗');
-                            showNotification('china');
-                            completed = true;
-                            return;
-                          } else {
-                            console.log('[Redirect] IP 非中国');
-                            completed = true;
-                            return;
-                          }
-                        } catch (e) {
-                          console.debug('[Redirect] 解析失败，尝试下一个');
-                          tryService(index + 1);
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', 'http://ip-api.com/json/?lang=zh-CN', true);
+                  xhr.timeout = 3000;
+                  xhr.onload = function() {
+                    console.log('[Redirect] 响应状态码:', xhr.status);
+                    if (xhr.status === 200) {
+                      try {
+                        var data = JSON.parse(xhr.responseText);
+                        console.log('[Redirect] 返回数据:', data);
+                        if (data.country === '中国') {
+                          console.log('[Redirect] IP 归属中国，显示弹窗');
+                          showNotification('china');
+                          completed = true;
+                        } else {
+                          console.log('[Redirect] IP 非中国');
+                          completed = true;
                         }
-                      } else {
-                        console.debug('[Redirect] 状态码 ' + xhr.status + '，尝试下一个');
-                        tryService(index + 1);
+                      } catch (e) {
+                        console.debug('[Redirect] 解析失败:', e);
+                        showNotification('unknown');
+                        completed = true;
                       }
-                    };
-                    xhr.onerror = function() {
-                      console.debug('[Redirect] 网络错误，尝试下一个');
-                      tryService(index + 1);
-                    };
-                    xhr.ontimeout = function() {
-                      console.debug('[Redirect] 超时，尝试下一个');
-                      tryService(index + 1);
-                    };
-                    xhr.send();
-                  }
-
-                  // 整体超时 5 秒后显示“无法识别”
-                  setTimeout(function() {
-                    if (!completed) {
-                      console.debug('[Redirect] 查询超时，显示无法识别');
+                    } else {
+                      console.debug('[Redirect] 状态码异常，显示无法识别');
                       showNotification('unknown');
                       completed = true;
                     }
-                  }, 5000);
-
-                  tryService(0);
+                  };
+                  xhr.onerror = function() {
+                    console.debug('[Redirect] 网络错误，显示无法识别');
+                    showNotification('unknown');
+                    completed = true;
+                  };
+                  xhr.ontimeout = function() {
+                    console.debug('[Redirect] 超时，显示无法识别');
+                    showNotification('unknown');
+                    completed = true;
+                  };
+                  xhr.send();
+                  console.log('[Redirect] 请求已发送');
                 } else {
                   console.log('[Redirect] 非目标域名，跳过');
                 }
 
-                // ----- 加载页面隐藏逻辑（等待 load 事件，超时半透明）-----
+                // 加载页面隐藏逻辑
                 function hideLoader() {
                   if (loader) {
                     loader.classList.add('hide');
